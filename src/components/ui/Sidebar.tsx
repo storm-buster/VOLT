@@ -6,11 +6,12 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Zap, BarChart3, Cpu, Receipt, Leaf,
-  ChevronLeft, ChevronRight,
+  ChevronLeft, ChevronRight, LayoutDashboard
 } from 'lucide-react';
 
 const navLinks = [
   { href: '/', label: 'Home', icon: Zap },
+  { href: '/dashboard', label: 'Dashboard Overview', icon: LayoutDashboard },
   { href: '/energy-usage', label: 'Energy Usage & Schedules', icon: BarChart3 },
   { href: '/appliances', label: 'Appliances', icon: Cpu },
   { href: '/billing', label: 'Billing & Saving', icon: Receipt },

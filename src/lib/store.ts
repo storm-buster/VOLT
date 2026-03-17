@@ -2,6 +2,31 @@ import { create } from 'zustand';
 
 export type TariffMode = 'peak' | 'mid' | 'sasta';
 
+export interface Appliance {
+  id: string;
+  name: string;
+  iconName: string; // Storing string name since we can't easily store React components in Zustand without issues
+  kw: number;
+  isOn: boolean;
+  dailyHours: number;
+  monthlyCost: number;
+  category: string;
+  smartEnabled: boolean;
+  schedule?: string;
+}
+
+export const defaultAppliances: Appliance[] = [
+  { id: 'ac', name: 'Air Conditioner', iconName: 'AirVent', kw: 1.5, isOn: true, dailyHours: 8, monthlyCost: 540, category: 'Cooling', smartEnabled: true, schedule: '9AM–12PM, 2PM–6PM' },
+  { id: 'geyser', name: 'Geyser', iconName: 'Droplets', kw: 2.0, isOn: false, dailyHours: 0.5, monthlyCost: 93, category: 'Heating', smartEnabled: true, schedule: '5:30AM – Sasta tariff' },
+  { id: 'fridge', name: 'Refrigerator', iconName: 'Refrigerator', kw: 0.15, isOn: true, dailyHours: 24, monthlyCost: 108, category: 'Kitchen', smartEnabled: false },
+  { id: 'wm', name: 'Washing Machine', iconName: 'WashingMachine', kw: 0.5, isOn: false, dailyHours: 0.75, monthlyCost: 35, category: 'Cleaning', smartEnabled: true, schedule: '6AM – Sasta tariff' },
+  { id: 'tv', name: 'Television', iconName: 'Tv', kw: 0.1, isOn: true, dailyHours: 5, monthlyCost: 15, category: 'Entertainment', smartEnabled: false },
+  { id: 'lights', name: 'LED Lights (8)', iconName: 'Lightbulb', kw: 0.08, isOn: true, dailyHours: 6, monthlyCost: 14, category: 'Lighting', smartEnabled: true },
+  { id: 'fan', name: 'Ceiling Fan (3)', iconName: 'Fan', kw: 0.075, isOn: true, dailyHours: 10, monthlyCost: 68, category: 'Cooling', smartEnabled: false },
+  { id: 'router', name: 'Wi-Fi Router', iconName: 'Smartphone', kw: 0.012, isOn: true, dailyHours: 24, monthlyCost: 9, category: 'Electronics', smartEnabled: false },
+  { id: 'iron', name: 'Iron', iconName: 'Plug', kw: 1.0, isOn: false, dailyHours: 0.3, monthlyCost: 23, category: 'Utilities', smartEnabled: false },
+];
+
 interface VoltStore {
   // Tariff
   tariffMode: TariffMode;
@@ -22,6 +47,10 @@ interface VoltStore {
   // Colony data
   colonyData: ColonyData;
   setColonyData: (data: ColonyData) => void;
+
+  // Appliances
+  appliances: Appliance[];
+  toggleAppliance: (id: string) => void;
 }
 
 export interface FlatData {
@@ -74,4 +103,9 @@ export const useVoltStore = create<VoltStore>((set) => ({
 
   colonyData: defaultColonyData,
   setColonyData: (data) => set({ colonyData: data }),
+
+  appliances: defaultAppliances,
+  toggleAppliance: (id) => set((state) => ({
+    appliances: state.appliances.map(a => a.id === id ? { ...a, isOn: !a.isOn } : a)
+  })),
 }));

@@ -66,9 +66,9 @@ const mockNotifications: Notification[] = [
 ];
 
 const typeConfig = {
-  alert: { icon: AlertTriangle, color: 'text-volt-red', bg: 'bg-red-50', border: 'border-red-200/50' },
-  saving: { icon: IndianRupee, color: 'text-volt-green', bg: 'bg-green-50', border: 'border-green-200/50' },
-  info: { icon: Zap, color: 'text-volt-blue', bg: 'bg-blue-50', border: 'border-blue-200/50' },
+  alert: { icon: AlertTriangle, color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20' },
+  saving: { icon: IndianRupee, color: 'text-green-400', bg: 'bg-green-500/10', border: 'border-green-500/20' },
+  info: { icon: Zap, color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/20' },
 };
 
 export function TopHeader() {
@@ -87,8 +87,7 @@ export function TopHeader() {
     '/appliances': 'Appliances',
     '/billing': 'Billing & Saving',
     '/carbon': 'Carbon Footprints',
-    '/dashboard': 'Colony Dashboard',
-    '/grid-impact': 'Grid Impact',
+    '/dashboard': 'Dashboard Overview',
     '/billing-sim': 'Billing Simulator',
     '/architecture': 'Architecture',
   };
@@ -97,11 +96,11 @@ export function TopHeader() {
 
   return (
     <>
-      <header className="fixed top-0 right-0 left-[260px] h-16 bg-white/80 backdrop-blur-xl border-b border-gray-200/50 z-30 flex items-center justify-between px-6">
+      <header className="fixed top-0 right-0 left-[260px] h-16 bg-[#0d1226]/80 backdrop-blur-xl border-b border-white/5 z-30 flex items-center justify-between px-6">
         {/* Page title */}
         <div>
-          <h1 className="text-lg font-bold text-volt-dark">{pageTitle}</h1>
-          <p className="text-xs text-gray-400">Welcome back, Avinash</p>
+          <h1 className="text-lg font-bold text-white">{pageTitle}</h1>
+          <p className="text-xs text-gray-500">Welcome back, Avinash</p>
         </div>
 
         {/* Right actions */}
@@ -109,9 +108,9 @@ export function TopHeader() {
           {/* Notification bell */}
           <button
             onClick={() => { setNotifOpen(!notifOpen); setProfileOpen(false); }}
-            className="relative w-10 h-10 rounded-xl bg-gray-50 hover:bg-gray-100 flex items-center justify-center transition-colors"
+            className="relative w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
           >
-            <Bell className="w-5 h-5 text-gray-600" />
+            <Bell className="w-5 h-5 text-gray-400" />
             {unreadCount > 0 && (
               <span className="absolute -top-1 -right-1 w-5 h-5 bg-volt-red text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-pulse">
                 {unreadCount}
@@ -122,14 +121,14 @@ export function TopHeader() {
           {/* Profile */}
           <button
             onClick={() => { setProfileOpen(!profileOpen); setNotifOpen(false); }}
-            className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/5 transition-colors"
           >
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-volt-blue to-volt-cyan flex items-center justify-center">
               <User className="w-5 h-5 text-white" />
             </div>
             <div className="text-left hidden sm:block">
-              <div className="text-sm font-semibold text-volt-dark">Avinash</div>
-              <div className="text-[10px] text-gray-400">Flat A-301</div>
+              <div className="text-sm font-semibold text-white">Avinash</div>
+              <div className="text-[10px] text-gray-500">Flat A-301</div>
             </div>
           </button>
         </div>
@@ -151,13 +150,13 @@ export function TopHeader() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="fixed top-16 right-6 w-96 max-h-[70vh] bg-white rounded-2xl shadow-2xl border border-gray-200/50 z-50 overflow-hidden"
+              className="fixed top-16 right-6 w-96 max-h-[70vh] bg-[#111827] rounded-2xl shadow-2xl border border-white/10 z-50 overflow-hidden"
             >
               {/* Header */}
-              <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-white/5">
                 <div className="flex items-center gap-2">
                   <Bell className="w-5 h-5 text-volt-blue" />
-                  <span className="font-bold text-volt-dark">Notifications</span>
+                  <span className="font-bold text-white">Notifications</span>
                   {unreadCount > 0 && (
                     <span className="px-2 py-0.5 bg-volt-red/10 text-volt-red text-xs font-bold rounded-full">
                       {unreadCount} new
@@ -166,7 +165,7 @@ export function TopHeader() {
                 </div>
                 <button
                   onClick={() => setNotifOpen(false)}
-                  className="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center"
+                  className="w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center"
                 >
                   <X className="w-4 h-4 text-gray-400" />
                 </button>
@@ -192,7 +191,7 @@ export function TopHeader() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-2">
-                            <span className={`text-sm font-semibold text-volt-dark ${!notif.read ? '' : 'text-gray-600'}`}>
+                            <span className={`text-sm font-semibold ${!notif.read ? 'text-white' : 'text-gray-400'}`}>
                               {notif.title}
                             </span>
                             {!notif.read && (
@@ -212,8 +211,8 @@ export function TopHeader() {
               </div>
 
               {/* Footer */}
-              <div className="px-5 py-3 border-t border-gray-100 bg-gray-50/50">
-                <button className="text-sm text-volt-blue font-medium hover:underline w-full text-center">
+              <div className="px-5 py-3 border-t border-white/5 bg-white/5">
+                <button className="text-sm text-volt-cyan font-medium hover:underline w-full text-center">
                   Mark all as read
                 </button>
               </div>
@@ -238,16 +237,16 @@ export function TopHeader() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="fixed top-16 right-6 w-72 bg-white rounded-2xl shadow-2xl border border-gray-200/50 z-50 overflow-hidden"
+              className="fixed top-16 right-6 w-72 bg-[#111827] rounded-2xl shadow-2xl border border-white/10 z-50 overflow-hidden"
             >
               {/* Profile header */}
-              <div className="p-5 bg-gradient-to-br from-volt-blue/5 to-volt-cyan/5 border-b border-gray-100">
+              <div className="p-5 bg-gradient-to-br from-volt-blue/10 to-volt-cyan/10 border-b border-white/5">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-volt-blue to-volt-cyan flex items-center justify-center">
                     <User className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <div className="font-bold text-volt-dark">Avinash</div>
+                    <div className="font-bold text-white">Avinash</div>
                     <div className="text-xs text-gray-500">Flat A-301 • GreenValley</div>
                   </div>
                 </div>
@@ -256,21 +255,21 @@ export function TopHeader() {
               {/* Quick stats */}
               <div className="p-4 space-y-3">
                 <div className="flex items-center justify-between py-2">
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-2 text-sm text-gray-400">
                     <TrendingDown className="w-4 h-4 text-volt-green" />
                     This month savings
                   </div>
                   <span className="text-sm font-bold text-volt-green">₹1,240</span>
                 </div>
                 <div className="flex items-center justify-between py-2">
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-2 text-sm text-gray-400">
                     <Leaf className="w-4 h-4 text-emerald-500" />
                     CO₂ saved
                   </div>
                   <span className="text-sm font-bold text-emerald-600">36.9 kg</span>
                 </div>
                 <div className="flex items-center justify-between py-2">
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-2 text-sm text-gray-400">
                     <Zap className="w-4 h-4 text-volt-amber" />
                     Energy score
                   </div>

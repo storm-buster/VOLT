@@ -12,7 +12,7 @@
     --amber: #F9A825;
     --cyan: #00BCD4;
     --dark: #0A0E1A;
-    --bg: #F8FAFF;
+    --bg: #0a0f1c;
   }
 
   * {
@@ -28,7 +28,7 @@
   body {
     font-family: 'Inter', sans-serif;
     background: var(--bg);
-    color: #1a1a2e;
+    color: #e2e8f0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -43,11 +43,11 @@
   }
 
   .glass-light {
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   }
 
   .glow-cyan {

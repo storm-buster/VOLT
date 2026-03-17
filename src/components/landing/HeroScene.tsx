@@ -10,7 +10,11 @@ export default function HeroScene() {
       dpr={[1, 2]}
       camera={{ position: [0, 0, 6], fov: 45 }}
       style={{ background: 'transparent' }}
-      gl={{ antialias: true, alpha: true }}
+      gl={{ antialias: true, alpha: true, failIfMajorPerformanceCaveat: false, powerPreference: 'default' }}
+      onCreated={({ gl }) => {
+        const canvas = gl.domElement;
+        canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); }, false);
+      }}
     >
       <ambientLight intensity={0.3} />
       <pointLight position={[10, 10, 10]} intensity={0.8} color="#00BCD4" />

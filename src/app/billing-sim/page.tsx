@@ -54,7 +54,7 @@ export default function BillingSimPage() {
   };
 
   return (
-    <div className="min-h-screen bg-volt-bg pt-20">
+    <div className="min-h-screen pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <motion.div
@@ -68,7 +68,7 @@ export default function BillingSimPage() {
               Billing Simulator
             </span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-volt-dark">
+          <h1 className="text-4xl md:text-5xl font-bold text-white">
             Simulate your <span className="text-gradient">savings</span>
           </h1>
           <p className="text-gray-500 mt-3 max-w-xl mx-auto">
@@ -83,7 +83,7 @@ export default function BillingSimPage() {
             animate={{ opacity: 1, x: 0 }}
           >
             <div className="glass-light rounded-2xl p-8">
-              <h2 className="text-lg font-bold text-volt-dark mb-6">Your Home Profile</h2>
+              <h2 className="text-lg font-bold text-white mb-6">Your Home Profile</h2>
 
               {/* Appliances */}
               <div className="mb-6">
@@ -253,16 +253,16 @@ export default function BillingSimPage() {
 
                   {/* Chart */}
                   <div className="glass-light rounded-2xl p-6">
-                    <h3 className="text-lg font-bold text-volt-dark mb-4">6-Month Projection</h3>
+                    <h3 className="text-lg font-bold text-white mb-4">6-Month Projection</h3>
                     <div className="h-72">
-                      <ResponsiveContainer width="100%" height="100%">
+                      <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
                         <BarChart data={result.monthlyData} barGap={4}>
                           <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                           <XAxis dataKey="month" tick={{ fontSize: 12 }} />
                           <YAxis tick={{ fontSize: 12 }} />
                           <Tooltip
                             contentStyle={{
-                              backgroundColor: 'white',
+                              backgroundColor: '#1a2332',
                               border: '1px solid #e5e7eb',
                               borderRadius: '12px',
                               boxShadow: '0 4px 20px rgba(0,0,0,0.08)',

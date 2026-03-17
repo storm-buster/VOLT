@@ -69,10 +69,10 @@ export function HeroSection() {
             Start Saving
           </Link>
           <Link
-            href="/grid-impact"
+            href="/dashboard"
             className="px-8 py-4 rounded-xl border border-white/20 text-white font-medium hover:bg-white/10 transition-all duration-300"
           >
-            See Grid Impact →
+            Overview Dashboard →
           </Link>
         </motion.div>
       </div>

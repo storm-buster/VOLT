@@ -17,10 +17,10 @@ const monthlyCO2 = [
 ];
 
 const equivalents = [
-  { icon: TreePine, label: 'Trees planted (equivalent)', value: '10.5 trees', color: 'text-volt-green', bg: 'bg-green-50' },
-  { icon: Factory, label: 'Coal not burned', value: '84 kg', color: 'text-gray-600', bg: 'bg-gray-100' },
-  { icon: Droplets, label: 'Water saved', value: '3,200 L', color: 'text-blue-500', bg: 'bg-blue-50' },
-  { icon: Wind, label: 'Clean air days', value: '12 days', color: 'text-cyan-600', bg: 'bg-cyan-50' },
+  { icon: TreePine, label: 'Trees planted (equivalent)', value: '10.5 trees', color: 'text-volt-green', bg: 'bg-green-500/10' },
+  { icon: Factory, label: 'Coal not burned', value: '84 kg', color: 'text-gray-600', bg: 'bg-white/10' },
+  { icon: Droplets, label: 'Water saved', value: '3,200 L', color: 'text-blue-500', bg: 'bg-blue-500/10' },
+  { icon: Wind, label: 'Clean air days', value: '12 days', color: 'text-cyan-600', bg: 'bg-cyan-500/10' },
 ];
 
 const energyMix = [
@@ -49,15 +49,15 @@ export default function CarbonPage() {
   const totalSaved = monthlyCO2.reduce((s, m) => s + m.saved, 0);
 
   return (
-    <div className="ml-[260px] pt-16 min-h-screen bg-volt-bg">
+    <div className="ml-[260px] pt-16 min-h-screen">
       <div className="p-6 lg:p-8 max-w-[1400px]">
         {/* Hero Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {[
-            { icon: Leaf, label: 'Total CO₂ Saved', value: `${totalSaved.toFixed(1)} kg`, color: 'text-volt-green', bg: 'bg-green-50' },
-            { icon: TreePine, label: 'Trees Equivalent', value: '10.5 trees', color: 'text-emerald-600', bg: 'bg-emerald-50' },
-            { icon: TrendingDown, label: 'Carbon Reduction', value: '39%', color: 'text-volt-blue', bg: 'bg-blue-50' },
-            { icon: Award, label: 'Green Score', value: '78 / 100', color: 'text-volt-amber', bg: 'bg-amber-50' },
+            { icon: Leaf, label: 'Total CO₂ Saved', value: `${totalSaved.toFixed(1)} kg`, color: 'text-volt-green', bg: 'bg-green-500/10' },
+            { icon: TreePine, label: 'Trees Equivalent', value: '10.5 trees', color: 'text-emerald-600', bg: 'bg-emerald-500/10' },
+            { icon: TrendingDown, label: 'Carbon Reduction', value: '39%', color: 'text-volt-blue', bg: 'bg-blue-500/10' },
+            { icon: Award, label: 'Green Score', value: '78 / 100', color: 'text-volt-amber', bg: 'bg-amber-500/10' },
           ].map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -83,10 +83,10 @@ export default function CarbonPage() {
             transition={{ delay: 0.2 }}
             className="lg:col-span-2 glass-light rounded-2xl p-6"
           >
-            <h2 className="text-lg font-bold text-volt-dark mb-1">Carbon Emissions Trend</h2>
+            <h2 className="text-lg font-bold text-white mb-1">Carbon Emissions Trend</h2>
             <p className="text-sm text-gray-500 mb-6">Monthly CO₂ saved vs emitted (in kg)</p>
             <div className="h-72">
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
                 <AreaChart data={monthlyCO2}>
                   <defs>
                     <linearGradient id="savedGrad" x1="0" y1="0" x2="0" y2="1">
@@ -102,7 +102,7 @@ export default function CarbonPage() {
                   <XAxis dataKey="month" tick={{ fontSize: 12 }} />
                   <YAxis tick={{ fontSize: 12 }} unit=" kg" />
                   <Tooltip
-                    contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '12px' }}
+                    contentStyle={{ backgroundColor: '#1a2332', border: '1px solid #e5e7eb', borderRadius: '12px' }}
                     formatter={(value) => [`${value} kg`, '']}
                   />
                   <Area type="monotone" dataKey="emitted" name="Emitted" stroke="#C62828" strokeWidth={2} fill="url(#emittedGrad)" />
@@ -119,10 +119,10 @@ export default function CarbonPage() {
             transition={{ delay: 0.3 }}
             className="glass-light rounded-2xl p-6 flex flex-col items-center"
           >
-            <h2 className="text-lg font-bold text-volt-dark mb-2">Green Score</h2>
+            <h2 className="text-lg font-bold text-white mb-2">Green Score</h2>
             <p className="text-sm text-gray-500 mb-4">Your environmental impact rating</p>
             <div className="relative w-48 h-48">
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
                 <RadialBarChart
                   cx="50%"
                   cy="50%"
@@ -154,14 +154,14 @@ export default function CarbonPage() {
           transition={{ delay: 0.4 }}
           className="mt-8"
         >
-          <h2 className="text-lg font-bold text-volt-dark mb-4">What your savings equal</h2>
+          <h2 className="text-lg font-bold text-white mb-4">What your savings equal</h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {equivalents.map((eq, i) => (
               <div key={i} className="glass-light rounded-2xl p-5 text-center hover:shadow-lg transition-all">
                 <div className={`w-12 h-12 ${eq.bg} rounded-xl flex items-center justify-center mx-auto mb-3`}>
                   <eq.icon className={`w-6 h-6 ${eq.color}`} />
                 </div>
-                <div className="text-xl font-black text-volt-dark">{eq.value}</div>
+                <div className="text-xl font-black text-white">{eq.value}</div>
                 <div className="text-xs text-gray-500 mt-1">{eq.label}</div>
               </div>
             ))}
@@ -177,7 +177,7 @@ export default function CarbonPage() {
             transition={{ delay: 0.5 }}
             className="glass-light rounded-2xl p-6"
           >
-            <h2 className="text-lg font-bold text-volt-dark mb-4">Green Badges</h2>
+            <h2 className="text-lg font-bold text-white mb-4">Green Badges</h2>
             <div className="grid grid-cols-3 gap-3">
               {badges.map((badge, i) => (
                 <div
@@ -185,7 +185,7 @@ export default function CarbonPage() {
                   className={`p-3 rounded-xl text-center transition-all ${
                     badge.achieved
                       ? 'bg-green-50 border border-green-200/50'
-                      : 'bg-gray-50 border border-gray-200/50 opacity-40'
+                      : 'bg-white/5 border border-white/5 opacity-40'
                   }`}
                 >
                   <div className="text-2xl mb-1">{badge.icon}</div>
@@ -204,11 +204,11 @@ export default function CarbonPage() {
             transition={{ delay: 0.6 }}
             className="glass-light rounded-2xl p-6"
           >
-            <h2 className="text-lg font-bold text-volt-dark mb-2">India&apos;s Grid Energy Mix</h2>
+            <h2 className="text-lg font-bold text-white mb-2">India&apos;s Grid Energy Mix</h2>
             <p className="text-sm text-gray-500 mb-4">Your usage draws from this mix</p>
             <div className="flex items-center gap-6">
               <div className="w-40 h-40">
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
                   <PieChart>
                     <Pie
                       data={energyMix}

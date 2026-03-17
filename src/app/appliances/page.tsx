@@ -7,33 +7,15 @@ import {
   Fan, Smartphone, Power, Clock, Zap, TrendingDown, AlertTriangle,
 } from 'lucide-react';
 
-interface Appliance {
-  id: string;
-  name: string;
-  icon: React.ElementType;
-  kw: number;
-  isOn: boolean;
-  dailyHours: number;
-  monthlyCost: number;
-  category: string;
-  smartEnabled: boolean;
-  schedule?: string;
-}
+import { useVoltStore } from '@/lib/store';
 
-const appliancesData: Appliance[] = [
-  { id: 'ac', name: 'Air Conditioner', icon: AirVent, kw: 1.5, isOn: true, dailyHours: 8, monthlyCost: 540, category: 'Cooling', smartEnabled: true, schedule: '9AM–12PM, 2PM–6PM' },
-  { id: 'geyser', name: 'Geyser', icon: Droplets, kw: 2.0, isOn: false, dailyHours: 0.5, monthlyCost: 93, category: 'Heating', smartEnabled: true, schedule: '5:30AM – Sasta tariff' },
-  { id: 'fridge', name: 'Refrigerator', icon: Refrigerator, kw: 0.15, isOn: true, dailyHours: 24, monthlyCost: 108, category: 'Kitchen', smartEnabled: false },
-  { id: 'wm', name: 'Washing Machine', icon: WashingMachine, kw: 0.5, isOn: false, dailyHours: 0.75, monthlyCost: 35, category: 'Cleaning', smartEnabled: true, schedule: '6AM – Sasta tariff' },
-  { id: 'tv', name: 'Television', icon: Tv, kw: 0.1, isOn: true, dailyHours: 5, monthlyCost: 15, category: 'Entertainment', smartEnabled: false },
-  { id: 'lights', name: 'LED Lights (8)', icon: Lightbulb, kw: 0.08, isOn: true, dailyHours: 6, monthlyCost: 14, category: 'Lighting', smartEnabled: true },
-  { id: 'fan', name: 'Ceiling Fan (3)', icon: Fan, kw: 0.075, isOn: true, dailyHours: 10, monthlyCost: 68, category: 'Cooling', smartEnabled: false },
-  { id: 'router', name: 'Wi-Fi Router', icon: Smartphone, kw: 0.012, isOn: true, dailyHours: 24, monthlyCost: 9, category: 'Electronics', smartEnabled: false },
-  { id: 'iron', name: 'Iron', icon: Plug, kw: 1.0, isOn: false, dailyHours: 0.3, monthlyCost: 23, category: 'Utilities', smartEnabled: false },
-];
+const iconMap: Record<string, React.ElementType> = {
+  AirVent, Droplets, WashingMachine, Tv, Lightbulb, Plug, Refrigerator, Fan, Smartphone
+};
 
 export default function AppliancesPage() {
-  const [appliances, setAppliances] = useState(appliancesData);
+  const appliances = useVoltStore(state => state.appliances);
+  const toggleAppliance = useVoltStore(state => state.toggleAppliance);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedAppliance, setSelectedAppliance] = useState<string | null>(null);
 
@@ -48,20 +30,16 @@ export default function AppliancesPage() {
   const smartCount = appliances.filter(a => a.smartEnabled).length;
   const onCount = appliances.filter(a => a.isOn).length;
 
-  const toggleAppliance = (id: string) => {
-    setAppliances(prev => prev.map(a => a.id === id ? { ...a, isOn: !a.isOn } : a));
-  };
-
   return (
-    <div className="ml-[260px] pt-16 min-h-screen bg-volt-bg">
+    <div className="ml-[260px] pt-16 min-h-screen">
       <div className="p-6 lg:p-8 max-w-[1400px]">
         {/* Quick Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {[
-            { icon: Power, label: 'Active Now', value: `${onCount} / ${appliances.length}`, color: 'text-volt-green', bg: 'bg-green-50' },
-            { icon: Zap, label: 'Current Load', value: `${totalKW.toFixed(2)} kW`, color: 'text-volt-cyan', bg: 'bg-cyan-50' },
-            { icon: TrendingDown, label: 'Monthly Cost', value: `₹${totalMonthlyCost}`, color: 'text-volt-blue', bg: 'bg-blue-50' },
-            { icon: Clock, label: 'Smart Enabled', value: `${smartCount} appliances`, color: 'text-volt-amber', bg: 'bg-amber-50' },
+            { icon: Power, label: 'Active Now', value: `${onCount} / ${appliances.length}`, color: 'text-volt-green', bg: 'bg-green-500/10' },
+            { icon: Zap, label: 'Current Load', value: `${totalKW.toFixed(2)} kW`, color: 'text-volt-cyan', bg: 'bg-cyan-500/10' },
+            { icon: TrendingDown, label: 'Monthly Cost', value: `₹${totalMonthlyCost}`, color: 'text-volt-blue', bg: 'bg-blue-500/10' },
+            { icon: Clock, label: 'Smart Enabled', value: `${smartCount} appliances`, color: 'text-volt-amber', bg: 'bg-amber-500/10' },
           ].map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -88,7 +66,7 @@ export default function AppliancesPage() {
               className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                 selectedCategory === cat
                   ? 'bg-volt-blue text-white shadow-md'
-                  : 'bg-white text-gray-500 hover:bg-gray-50 border border-gray-200'
+                  : 'bg-white/5 text-gray-400 hover:bg-white/10 border border-white/10'
               }`}
             >
               {cat}
@@ -98,7 +76,9 @@ export default function AppliancesPage() {
 
         {/* Appliance Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((app, i) => (
+          {filtered.map((app, i) => {
+            const IconComponent = iconMap[app.iconName] || Zap;
+            return (
             <motion.div
               key={app.id}
               initial={{ opacity: 0, y: 20 }}
@@ -106,20 +86,20 @@ export default function AppliancesPage() {
               transition={{ delay: i * 0.05 }}
               className={`rounded-2xl p-5 border-2 transition-all duration-300 cursor-pointer ${
                 app.isOn
-                  ? 'bg-white border-volt-cyan/20 shadow-lg shadow-volt-cyan/5'
-                  : 'bg-gray-50/50 border-gray-200/50'
+                  ? 'bg-white/5 border-volt-cyan/20 shadow-lg shadow-volt-cyan/5'
+                  : 'bg-white/[0.03] border-white/5'
               }`}
               onClick={() => setSelectedAppliance(selectedAppliance === app.id ? null : app.id)}
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${
-                    app.isOn ? 'bg-volt-cyan/10' : 'bg-gray-100'
+                    app.isOn ? 'bg-volt-cyan/10' : 'bg-white/10'
                   }`}>
-                    <app.icon className={`w-6 h-6 ${app.isOn ? 'text-volt-cyan' : 'text-gray-400'}`} />
+                    <IconComponent className={`w-6 h-6 ${app.isOn ? 'text-volt-cyan' : 'text-gray-400'}`} />
                   </div>
                   <div>
-                    <div className={`text-sm font-bold ${app.isOn ? 'text-volt-dark' : 'text-gray-500'}`}>
+                    <div className={`text-sm font-bold ${app.isOn ? 'text-white' : 'text-gray-500'}`}>
                       {app.name}
                     </div>
                     <div className="text-xs text-gray-400">{app.category}</div>
@@ -195,7 +175,8 @@ export default function AppliancesPage() {
                 )}
               </AnimatePresence>
             </motion.div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

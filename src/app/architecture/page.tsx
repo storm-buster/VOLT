@@ -101,7 +101,7 @@ export default function ArchitecturePage() {
   const [expandedBrain, setExpandedBrain] = useState<string | null>(null);
 
   return (
-    <div className="min-h-screen bg-volt-bg pt-20">
+    <div className="min-h-screen pt-20">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <motion.div
@@ -115,7 +115,7 @@ export default function ArchitecturePage() {
               System Architecture
             </span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-volt-dark">
+          <h1 className="text-4xl md:text-5xl font-bold text-white">
             The <span className="text-gradient">4-Brain</span> Engine
           </h1>
           <p className="text-gray-500 mt-3 max-w-xl mx-auto">
@@ -166,7 +166,7 @@ export default function ArchitecturePage() {
                               BRAIN {i + 1}
                             </span>
                           </div>
-                          <h3 className="text-xl font-bold text-volt-dark mt-1">{brain.title}</h3>
+                          <h3 className="text-xl font-bold text-white mt-1">{brain.title}</h3>
                           <p className="text-sm text-gray-500">{brain.shortDesc}</p>
                         </div>
                         <motion.div
@@ -217,7 +217,7 @@ export default function ArchitecturePage() {
           viewport={{ once: true }}
           className="glass-light rounded-2xl p-8 text-center"
         >
-          <h3 className="text-lg font-bold text-volt-dark mb-4">End-to-End Data Flow</h3>
+          <h3 className="text-lg font-bold text-white mb-4">End-to-End Data Flow</h3>
           <div className="flex flex-wrap items-center justify-center gap-3 text-sm">
             {[
               { label: 'Smart Meter', color: 'bg-gray-100 text-gray-600' },

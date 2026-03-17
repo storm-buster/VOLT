@@ -46,10 +46,10 @@ const scheduleItems = [
 ];
 
 const statusConfig = {
-  completed: { label: 'Done', color: 'text-gray-400', bg: 'bg-gray-100' },
-  active: { label: 'Running', color: 'text-volt-green', bg: 'bg-green-100' },
-  scheduled: { label: 'Scheduled', color: 'text-volt-blue', bg: 'bg-blue-100' },
-  optimized: { label: 'VoltIQ Optimized', color: 'text-volt-cyan', bg: 'bg-cyan-100' },
+  completed: { label: 'Done', color: 'text-gray-400', bg: 'bg-white/10' },
+  active: { label: 'Running', color: 'text-volt-green', bg: 'bg-green-500/10' },
+  scheduled: { label: 'Scheduled', color: 'text-volt-blue', bg: 'bg-blue-500/10' },
+  optimized: { label: 'VoltIQ Optimized', color: 'text-volt-cyan', bg: 'bg-cyan-500/10' },
 };
 
 const tariffColors = {
@@ -65,15 +65,15 @@ export default function EnergyUsagePage() {
   const sastaUsage = hourlyData.filter(h => h.tariff === 'Sasta').reduce((s, h) => s + h.usage, 0);
 
   return (
-    <div className="ml-[260px] pt-16 min-h-screen bg-volt-bg">
+    <div className="ml-[260px] pt-16 min-h-screen">
       <div className="p-6 lg:p-8 max-w-[1400px]">
         {/* Quick Stats Row */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {[
-            { icon: Zap, label: 'Today\'s Usage', value: `${totalToday.toFixed(1)} kWh`, color: 'text-volt-cyan', bg: 'bg-cyan-50' },
-            { icon: TrendingDown, label: 'Saved Today', value: '₹47', color: 'text-volt-green', bg: 'bg-green-50' },
-            { icon: Sun, label: 'Peak Hours Used', value: `${peakUsage.toFixed(1)} kWh`, color: 'text-volt-red', bg: 'bg-red-50' },
-            { icon: Moon, label: 'Sasta Hours Used', value: `${sastaUsage.toFixed(1)} kWh`, color: 'text-volt-green', bg: 'bg-green-50' },
+            { icon: Zap, label: 'Today\'s Usage', value: `${totalToday.toFixed(1)} kWh`, color: 'text-volt-cyan', bg: 'bg-cyan-500/10' },
+            { icon: TrendingDown, label: 'Saved Today', value: '₹47', color: 'text-volt-green', bg: 'bg-green-500/10' },
+            { icon: Sun, label: 'Peak Hours Used', value: `${peakUsage.toFixed(1)} kWh`, color: 'text-volt-red', bg: 'bg-red-500/10' },
+            { icon: Moon, label: 'Sasta Hours Used', value: `${sastaUsage.toFixed(1)} kWh`, color: 'text-volt-green', bg: 'bg-green-500/10' },
           ].map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -100,16 +100,16 @@ export default function EnergyUsagePage() {
         >
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-lg font-bold text-volt-dark">Energy Consumption</h2>
+              <h2 className="text-lg font-bold text-white">Energy Consumption</h2>
               <p className="text-sm text-gray-500">Hourly breakdown with tariff zones</p>
             </div>
-            <div className="flex bg-gray-100 rounded-xl p-1">
+            <div className="flex bg-white/10 rounded-xl p-1">
               {['today', 'week'].map((v) => (
                 <button
                   key={v}
                   onClick={() => setView(v as 'today' | 'week')}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    view === v ? 'bg-white shadow-sm text-volt-dark' : 'text-gray-500 hover:text-gray-700'
+                    view === v ? 'bg-white/15 shadow-sm text-white' : 'text-gray-500 hover:text-gray-300'
                   }`}
                 >
                   {v === 'today' ? 'Today' : 'This Week'}
@@ -119,7 +119,7 @@ export default function EnergyUsagePage() {
           </div>
 
           <div className="h-80">
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
               {view === 'today' ? (
                 <AreaChart data={hourlyData}>
                   <defs>
@@ -132,7 +132,7 @@ export default function EnergyUsagePage() {
                   <XAxis dataKey="hour" tick={{ fontSize: 11 }} interval={2} />
                   <YAxis tick={{ fontSize: 11 }} unit=" kWh" />
                   <Tooltip
-                    contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}
+                    contentStyle={{ backgroundColor: '#1a2332', border: '1px solid #e5e7eb', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}
                     formatter={(value) => [`${value} kWh`, 'Usage']}
                   />
                   <Area type="monotone" dataKey="usage" stroke="#00BCD4" strokeWidth={2} fill="url(#usageGrad)" />
@@ -142,7 +142,7 @@ export default function EnergyUsagePage() {
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                   <XAxis dataKey="day" tick={{ fontSize: 12 }} />
                   <YAxis tick={{ fontSize: 12 }} unit=" kWh" />
-                  <Tooltip contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '12px' }} />
+                  <Tooltip contentStyle={{ backgroundColor: '#1a2332', border: '1px solid #e5e7eb', borderRadius: '12px' }} />
                   <Legend />
                   <Bar dataKey="usage" name="Actual" fill="#1B4F8A" radius={[6, 6, 0, 0]} />
                   <Bar dataKey="target" name="Target" fill="#2E7D32" radius={[6, 6, 0, 0]} opacity={0.4} />
@@ -178,15 +178,15 @@ export default function EnergyUsagePage() {
         >
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-lg font-bold text-volt-dark">Today&apos;s Schedule</h2>
+              <h2 className="text-lg font-bold text-white">Today&apos;s Schedule</h2>
               <p className="text-sm text-gray-500">Smart scheduling saves you ₹72 today</p>
             </div>
             <div className="flex items-center gap-2">
-              <button className="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center">
+              <button className="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/15 flex items-center justify-center">
                 <ChevronLeft className="w-4 h-4" />
               </button>
-              <span className="text-sm font-semibold text-volt-dark px-3">Today</span>
-              <button className="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center">
+              <span className="text-sm font-semibold text-white px-3">Today</span>
+              <button className="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/15 flex items-center justify-center">
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
@@ -209,7 +209,7 @@ export default function EnergyUsagePage() {
                 >
                   {/* Time */}
                   <div className="w-20 shrink-0">
-                    <div className="flex items-center gap-1 text-sm font-bold text-volt-dark">
+                    <div className="flex items-center gap-1 text-sm font-bold text-white">
                       <Clock className="w-3.5 h-3.5 text-gray-400" />
                       {item.time}
                     </div>
@@ -217,7 +217,7 @@ export default function EnergyUsagePage() {
 
                   {/* Appliance */}
                   <div className="flex-1">
-                    <div className="text-sm font-semibold text-volt-dark">{item.appliance}</div>
+                    <div className="text-sm font-semibold text-white">{item.appliance}</div>
                     <div className="text-xs text-gray-400">{item.duration}</div>
                   </div>
 

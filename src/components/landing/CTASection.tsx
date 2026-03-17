@@ -4,6 +4,14 @@ import { motion } from 'framer-motion';
 import { Zap, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
+// Deterministic particle positions to avoid server/client hydration mismatch
+const particleData = Array.from({ length: 20 }).map((_, i) => ({
+  left: ((i * 37 + 13) % 100),
+  top: ((i * 53 + 7) % 100),
+  duration: 3 + (i % 5) * 0.4,
+  delay: (i % 7) * 0.4,
+}));
+
 export function CTASection() {
   return (
     <section className="relative py-32 overflow-hidden">
@@ -12,22 +20,22 @@ export function CTASection() {
 
       {/* Animated particles background */}
       <div className="absolute inset-0 opacity-20">
-        {Array.from({ length: 20 }).map((_, i) => (
+        {particleData.map((p, i) => (
           <motion.div
             key={i}
             className="absolute w-1 h-1 bg-volt-cyan rounded-full"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${p.left}%`,
+              top: `${p.top}%`,
             }}
             animate={{
               opacity: [0, 1, 0],
               scale: [0, 1.5, 0],
             }}
             transition={{
-              duration: 3 + Math.random() * 2,
+              duration: p.duration,
               repeat: Infinity,
-              delay: Math.random() * 3,
+              delay: p.delay,
             }}
           />
         ))}

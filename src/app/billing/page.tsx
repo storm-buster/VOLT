@@ -49,15 +49,15 @@ export default function BillingPage() {
   const totalBillOptimized = monthlyBills.reduce((s, m) => s + m.optimized, 0);
 
   return (
-    <div className="ml-[260px] pt-16 min-h-screen bg-volt-bg">
+    <div className="ml-[260px] pt-16 min-h-screen">
       <div className="p-6 lg:p-8 max-w-[1400px]">
         {/* Top Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {[
-            { icon: Receipt, label: 'This Month\'s Bill', value: '₹620', sub: 'vs ₹847 baseline', color: 'text-volt-blue', bg: 'bg-blue-50' },
-            { icon: TrendingDown, label: 'Monthly Savings', value: '₹227', sub: '26.8% reduction', color: 'text-volt-green', bg: 'bg-green-50' },
-            { icon: IndianRupee, label: 'Total Saved (6 mo)', value: `₹${totalSavings.toLocaleString('en-IN')}`, sub: 'Since Oct 2025', color: 'text-volt-amber', bg: 'bg-amber-50' },
-            { icon: Calendar, label: 'Avg per Day', value: '₹20.7', sub: '~6.2 kWh/day', color: 'text-volt-cyan', bg: 'bg-cyan-50' },
+            { icon: Receipt, label: 'This Month\'s Bill', value: '₹620', sub: 'vs ₹847 baseline', color: 'text-volt-blue', bg: 'bg-blue-500/10' },
+            { icon: TrendingDown, label: 'Monthly Savings', value: '₹227', sub: '26.8% reduction', color: 'text-volt-green', bg: 'bg-green-500/10' },
+            { icon: IndianRupee, label: 'Total Saved (6 mo)', value: `₹${totalSavings.toLocaleString('en-IN')}`, sub: 'Since Oct 2025', color: 'text-volt-amber', bg: 'bg-amber-500/10' },
+            { icon: Calendar, label: 'Avg per Day', value: '₹20.7', sub: '~6.2 kWh/day', color: 'text-volt-cyan', bg: 'bg-cyan-500/10' },
           ].map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -86,22 +86,22 @@ export default function BillingPage() {
           >
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h2 className="text-lg font-bold text-volt-dark">Bill Comparison</h2>
+                <h2 className="text-lg font-bold text-white">Bill Comparison</h2>
                 <p className="text-sm text-gray-500">Baseline vs VoltIQ optimized</p>
               </div>
-              <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-50 hover:bg-gray-100 text-sm text-gray-600 transition-colors">
+              <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-sm text-gray-400 transition-colors">
                 <Download className="w-4 h-4" />
                 Export
               </button>
             </div>
             <div className="h-72">
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
                 <BarChart data={monthlyBills} barGap={6}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                   <XAxis dataKey="month" tick={{ fontSize: 12 }} />
                   <YAxis tick={{ fontSize: 12 }} />
                   <Tooltip
-                    contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}
+                    contentStyle={{ backgroundColor: '#1a2332', border: '1px solid #e5e7eb', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}
                     formatter={(value) => [`₹${value}`, '']}
                   />
                   <Legend />
@@ -119,10 +119,10 @@ export default function BillingPage() {
             transition={{ delay: 0.3 }}
             className="glass-light rounded-2xl p-6"
           >
-            <h2 className="text-lg font-bold text-volt-dark mb-2">Bill Breakdown</h2>
+            <h2 className="text-lg font-bold text-white mb-2">Bill Breakdown</h2>
             <p className="text-sm text-gray-500 mb-4">By appliance this month</p>
             <div className="h-56">
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
                 <PieChart>
                   <Pie
                     data={breakdownData}
@@ -164,12 +164,12 @@ export default function BillingPage() {
             transition={{ delay: 0.4 }}
             className="glass-light rounded-2xl p-6"
           >
-            <h2 className="text-lg font-bold text-volt-dark mb-4">Savings History</h2>
+            <h2 className="text-lg font-bold text-white mb-4">Savings History</h2>
             <div className="space-y-3">
               {savingsHistory.map((m, i) => (
                 <div key={i} className="flex items-center gap-4">
                   <span className="text-xs font-medium text-gray-500 w-16">{m.month}</span>
-                  <div className="flex-1 h-8 bg-gray-100 rounded-full relative overflow-hidden">
+                  <div className="flex-1 h-8 bg-white/10 rounded-full relative overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${m.percent * 3}%` }}
@@ -201,7 +201,7 @@ export default function BillingPage() {
               className="flex items-center justify-between w-full mb-4"
             >
               <div>
-                <h2 className="text-lg font-bold text-volt-dark">Tariff Slab Rates</h2>
+                <h2 className="text-lg font-bold text-white">Tariff Slab Rates</h2>
                 <p className="text-sm text-gray-500">BSES Rajdhani — Current rates</p>
               </div>
               <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${showSlabs ? 'rotate-180' : ''}`} />
@@ -230,7 +230,7 @@ export default function BillingPage() {
             <div className="mt-6 p-4 bg-gradient-to-br from-volt-blue/5 to-volt-cyan/5 rounded-xl border border-volt-blue/10">
               <div className="flex items-center gap-2 mb-3">
                 <Zap className="w-4 h-4 text-volt-blue" />
-                <span className="text-sm font-bold text-volt-dark">VoltIQ Impact Summary</span>
+                <span className="text-sm font-bold text-white">VoltIQ Impact Summary</span>
               </div>
               <div className="grid grid-cols-2 gap-4 text-center">
                 <div>
