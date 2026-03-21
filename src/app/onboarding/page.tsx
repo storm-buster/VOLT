@@ -17,7 +17,7 @@ import {
   Clock,
   Calendar
 } from 'lucide-react';
-import { useVoltStore, defaultAppliances } from '@/lib/store';
+import { useVoltStore } from '@/lib/store';
 import { GlassCard } from '@/components/ui/GlassCard';
 
 export default function OnboardingPage() {
@@ -62,7 +62,16 @@ export default function OnboardingPage() {
 
   const discoms = ['UPPCL', 'BSES', 'MSEDCL', 'TPPDL'];
   
-  const applianceOptions = defaultAppliances.filter(a => a.smartEnabled);
+  // Fixed 7 appliances for onboarding
+  const applianceOptions = [
+    { id: 'ac', name: 'Air Conditioner', kw: 1.5, icon: '❄️', dailyHours: 8 },
+    { id: 'geyser', name: 'Geyser', kw: 2.0, icon: '🔥', dailyHours: 1 },
+    { id: 'wm', name: 'Washing Machine', kw: 0.5, icon: '🧺', dailyHours: 1 },
+    { id: 'fridge', name: 'Refrigerator', kw: 0.15, icon: '🧊', dailyHours: 24 },
+    { id: 'tv', name: 'Television', kw: 0.1, icon: '📺', dailyHours: 4 },
+    { id: 'pump', name: 'Water Pump', kw: 0.75, icon: '💧', dailyHours: 2 },
+    { id: 'lights', name: 'LED Lights', kw: 0.08, icon: '💡', dailyHours: 6 },
+  ];
 
   const handleNext = async () => {
     if (onboarding.currentStep === 1) {
@@ -407,7 +416,7 @@ export default function OnboardingPage() {
                               <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
                                 isSelected ? 'bg-volt-cyan/20' : 'bg-white/10'
                               }`}>
-                                <span className="text-xl">{appliance.id === 'ac' ? '❄️' : appliance.id === 'geyser' ? '🔥' : appliance.id === 'wm' ? '🌀' : '💡'}</span>
+                                <span className="text-xl">{appliance.icon}</span>
                               </div>
                               <div>
                                 <h4 className="font-semibold text-white">{appliance.name}</h4>

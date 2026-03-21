@@ -44,7 +44,7 @@ const brains = [
 
 export function SolutionSection() {
   return (
-    <section className="section-padding bg-gray-50/50 relative overflow-hidden">
+    <section className="section-padding bg-white relative overflow-hidden">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -56,10 +56,10 @@ export function SolutionSection() {
           <span className="text-volt-cyan font-semibold text-sm tracking-widest uppercase">
             The Solution
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold text-volt-dark mt-3">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-3">
             Four brains. <span className="text-gradient">One mission.</span>
           </h2>
-          <p className="text-gray-500 mt-4 max-w-2xl mx-auto text-lg">
+          <p className="text-gray-600 mt-4 max-w-2xl mx-auto text-lg">
             VoltIQ&apos;s 4-brain architecture turns raw meter data into real savings.
           </p>
         </motion.div>
@@ -74,7 +74,7 @@ export function SolutionSection() {
               transition={{ duration: 0.5, delay: i * 0.12 }}
               className="group relative"
             >
-              <div className="glass-light rounded-2xl p-8 h-full border border-gray-100 group-hover:border-gray-200 transition-all duration-500 group-hover:shadow-2xl">
+              <div className="bg-white rounded-2xl p-8 h-full border border-gray-200 shadow-sm group-hover:border-gray-300 transition-all duration-500 group-hover:shadow-xl">
                 {/* Top bar accent */}
                 <div className={`h-1 w-16 rounded-full bg-gradient-to-r ${brain.color} mb-6`} />
 
@@ -83,11 +83,11 @@ export function SolutionSection() {
                     <brain.icon className={`w-7 h-7 ${brain.textColor}`} />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-volt-dark">{brain.title}</h3>
+                    <h3 className="text-xl font-bold text-gray-900">{brain.title}</h3>
                     <p className={`text-sm font-semibold ${brain.textColor} mb-2`}>
                       {brain.subtitle}
                     </p>
-                    <p className="text-gray-500 leading-relaxed">{brain.description}</p>
+                    <p className="text-gray-600 leading-relaxed">{brain.description}</p>
                   </div>
                 </div>
 

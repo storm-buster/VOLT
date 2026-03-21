@@ -39,7 +39,7 @@ const stats = [
 
 export function NumbersSection() {
   return (
-    <section className="section-padding bg-gray-50/50 relative overflow-hidden">
+    <section className="section-padding bg-white relative overflow-hidden">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -51,7 +51,7 @@ export function NumbersSection() {
           <span className="text-volt-blue font-semibold text-sm tracking-widest uppercase">
             By The Numbers
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold text-volt-dark mt-3">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-3">
             Impact at <span className="text-gradient">scale</span>
           </h2>
         </motion.div>
@@ -66,8 +66,8 @@ export function NumbersSection() {
               transition={{ duration: 0.5, delay: i * 0.15 }}
               className="relative group"
             >
-              <div className={`bg-gradient-to-br ${stat.bg} rounded-3xl p-10 text-center border border-gray-100 group-hover:shadow-2xl transition-all duration-500 group-hover:scale-[1.02]`}>
-                <div className="w-16 h-16 mx-auto rounded-2xl bg-white shadow-md flex items-center justify-center mb-6 group-hover:shadow-lg transition-shadow">
+              <div className={`bg-white rounded-3xl p-10 text-center border border-gray-200 shadow-sm group-hover:shadow-xl transition-all duration-500 group-hover:scale-[1.02]`}>
+                <div className="w-16 h-16 mx-auto rounded-2xl bg-gray-50 shadow-md flex items-center justify-center mb-6 group-hover:shadow-lg transition-shadow">
                   <stat.icon className={`w-8 h-8 ${stat.color}`} />
                 </div>
                 <div className={`text-5xl md:text-6xl font-black ${stat.color} mb-2`}>
@@ -77,8 +77,8 @@ export function NumbersSection() {
                     stat.displayValue
                   )}
                 </div>
-                <div className="text-xl font-bold text-volt-dark mb-2">{stat.label}</div>
-                <p className="text-gray-500">{stat.description}</p>
+                <div className="text-xl font-bold text-gray-900 mb-2">{stat.label}</div>
+                <p className="text-gray-600">{stat.description}</p>
               </div>
             </motion.div>
           ))}
