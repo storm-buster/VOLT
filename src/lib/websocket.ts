@@ -66,6 +66,12 @@ export function connectWebSocket() {
       useVoltStore.getState().setWsConnected(true);
       stopMockUpdates();
 
+      // Clear existing heartbeat timer to prevent stacking
+      if (heartbeatTimer) {
+        clearInterval(heartbeatTimer);
+        heartbeatTimer = null;
+      }
+
       // Start heartbeat
       heartbeatTimer = setInterval(() => {
         if (ws?.readyState === WebSocket.OPEN) {
@@ -77,14 +83,36 @@ export function connectWebSocket() {
     ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
+        const store = useVoltStore.getState();
+        
         if (data.type === 'colony_update') {
-          const store = useVoltStore.getState();
           if (data.tariff) store.setTariffMode(data.tariff);
           if (data.totalKW) store.setLiveKW(data.totalKW);
           if (data.colonyData) store.setColonyData(data.colonyData);
         }
-      } catch {
-        // Ignore parse errors
+        
+        if (data.type === 'appliance_status') {
+          // Handle appliance status updates
+          const { applianceId } = data;
+          if (applianceId) {
+            store.toggleAppliance(applianceId);
+          }
+        }
+        
+        if (data.type === 'alert') {
+          // Push new alerts
+          const { alertType, title, message, actionLabel } = data;
+          if (title && message) {
+            store.addAlert({
+              type: alertType || 'tariff',
+              title,
+              message,
+              actionLabel,
+            });
+          }
+        }
+      } catch (error) {
+        console.warn('WebSocket message parse error:', error);
       }
     };
 
@@ -93,8 +121,10 @@ export function connectWebSocket() {
       useVoltStore.getState().setWsConnected(false);
       // Fallback to mock data
       startMockUpdates();
-      // Try reconnecting
-      reconnectTimer = setTimeout(connectWebSocket, RECONNECT_DELAY);
+      // Try reconnecting (only if not already scheduled)
+      if (!reconnectTimer) {
+        reconnectTimer = setTimeout(connectWebSocket, RECONNECT_DELAY);
+      }
     };
 
     ws.onerror = () => {

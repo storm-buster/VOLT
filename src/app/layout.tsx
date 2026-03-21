@@ -3,6 +3,8 @@ import "./globals.css";
 import { Providers } from "@/lib/providers";
 import { Sidebar } from "@/components/ui/Sidebar";
 import { TopHeader } from "@/components/ui/TopHeader";
+import BottomNav from "@/components/navigation/BottomNav";
+import RouteGuard from "@/components/navigation/RouteGuard";
 
 export const metadata: Metadata = {
   title: "VoltIQ — India's Smart Energy Super App",
@@ -20,9 +22,12 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body className="font-inter antialiased">
         <Providers>
-          <Sidebar />
-          <TopHeader />
-          <main>{children}</main>
+          <RouteGuard>
+            <Sidebar />
+            <TopHeader />
+            <main className="pb-20 lg:pb-0">{children}</main>
+            <BottomNav />
+          </RouteGuard>
         </Providers>
       </body>
     </html>

@@ -31,7 +31,7 @@ export default function AppliancesPage() {
   const onCount = appliances.filter(a => a.isOn).length;
 
   return (
-    <div className="ml-[260px] pt-16 min-h-screen">
+    <div className="ml-0 lg:ml-[260px] pt-16 min-h-screen bg-[#0a0f1c]">
       <div className="p-6 lg:p-8 max-w-[1400px]">
         {/* Quick Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -130,14 +130,26 @@ export default function AppliancesPage() {
                 <span className="text-sm font-bold text-volt-blue">₹{app.monthlyCost}/mo</span>
               </div>
 
-              {/* Smart badge */}
+              {/* Smart badge and schedule */}
               {app.smartEnabled && (
-                <div className="mt-3 flex items-center gap-2">
-                  <span className="text-[10px] font-bold px-2 py-0.5 bg-volt-cyan/10 text-volt-cyan rounded-full">
-                    ⚡ VoltIQ Smart
-                  </span>
+                <div className="mt-3 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold px-2 py-0.5 bg-volt-cyan/10 text-volt-cyan rounded-full">
+                      ⚡ VoltIQ Smart
+                    </span>
+                    {app.schedule && (
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-volt-green" />
+                        <span className="text-[10px] text-volt-green font-semibold">Scheduled</span>
+                      </div>
+                    )}
+                  </div>
                   {app.schedule && (
-                    <span className="text-[10px] text-gray-400">{app.schedule}</span>
+                    <div className="p-2 bg-volt-green/10 border border-volt-green/30 rounded-lg">
+                      <p className="text-[10px] text-gray-300">
+                        <span className="font-semibold">Next run:</span> {app.schedule}
+                      </p>
+                    </div>
                   )}
                 </div>
               )}
@@ -162,7 +174,7 @@ export default function AppliancesPage() {
                       </div>
                       <div className="flex justify-between text-xs">
                         <span className="text-gray-500">% of total bill</span>
-                        <span className="font-semibold">{((app.monthlyCost / totalMonthlyCost) * 100).toFixed(1)}%</span>
+                        <span className="font-semibold">{totalMonthlyCost > 0 ? ((app.monthlyCost / totalMonthlyCost) * 100).toFixed(1) : '0.0'}%</span>
                       </div>
                       {!app.smartEnabled && (
                         <div className="flex items-center gap-1 text-xs text-volt-amber mt-2">

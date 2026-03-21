@@ -76,8 +76,8 @@ export function TopHeader() {
   const [notifOpen, setNotifOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
 
-  // Don't show on landing page
-  if (pathname === '/') return null;
+  // Don't show on landing, login, and onboarding pages
+  if (pathname === '/' || pathname === '/login' || pathname === '/onboarding') return null;
 
   const unreadCount = mockNotifications.filter((n) => !n.read).length;
 

@@ -27,6 +27,78 @@ export const defaultAppliances: Appliance[] = [
   { id: 'iron', name: 'Iron', iconName: 'Plug', kw: 1.0, isOn: false, dailyHours: 0.3, monthlyCost: 23, category: 'Utilities', smartEnabled: false },
 ];
 
+// Auth types
+export interface User {
+  id: string;
+  name: string;
+  phone: string;
+  discom: string;
+  accountType: 'prepaid' | 'postpaid';
+  meterNumber?: string;
+  location?: string;
+}
+
+// Onboarding types
+export interface OnboardingState {
+  currentStep: number;
+  userInfo: {
+    name: string;
+    discom: string;
+    accountType: 'prepaid' | 'postpaid';
+  } | null;
+  meterInfo: {
+    meterNumber: string;
+    connected: boolean;
+  } | null;
+  appliancePreferences: {
+    [key: string]: {
+      hours: number;
+      temperature?: number;
+      timePreference?: string;
+      frequency?: number;
+    };
+  };
+}
+
+// Chat types
+export interface ChatMessage {
+  id: string;
+  text: string;
+  sender: 'user' | 'bot';
+  timestamp: Date;
+  type?: 'text' | 'data' | 'suggestion';
+}
+
+// Optimization types
+export interface OptimizationResult {
+  originalCost: number;
+  optimizedCost: number;
+  savings: number;
+  savingsPercent: number;
+  schedule: ApplianceSchedule[];
+  solveTimeMs: number;
+  pipeline: string;
+}
+
+export interface ApplianceSchedule {
+  applianceId: string;
+  applianceName: string;
+  scheduledTime: string;
+  status: 'scheduled' | 'active' | 'completed';
+  tariffZone: 'peak' | 'mid' | 'sasta';
+}
+
+// Alert types
+export interface Alert {
+  id: string;
+  type: 'tariff' | 'savings' | 'anomaly';
+  title: string;
+  message: string;
+  timestamp: Date;
+  read: boolean;
+  actionLabel?: string;
+}
+
 interface VoltStore {
   // Tariff
   tariffMode: TariffMode;
@@ -51,6 +123,40 @@ interface VoltStore {
   // Appliances
   appliances: Appliance[];
   toggleAppliance: (id: string) => void;
+
+  // Auth
+  isAuthenticated: boolean;
+  user: User | null;
+  setUser: (user: User | null) => void;
+  login: (phone: string, otp: string) => Promise<boolean>;
+  logout: () => void;
+
+  // Onboarding
+  onboarding: OnboardingState;
+  setOnboardingStep: (step: number) => void;
+  setUserInfo: (info: OnboardingState['userInfo']) => void;
+  setMeterInfo: (info: OnboardingState['meterInfo']) => void;
+  setAppliancePreferences: (prefs: OnboardingState['appliancePreferences']) => void;
+  completeOnboarding: () => void;
+
+  // Chat
+  chatMessages: ChatMessage[];
+  isTyping: boolean;
+  sendMessage: (text: string) => void;
+  addBotMessage: (text: string, type?: ChatMessage['type']) => void;
+  setIsTyping: (typing: boolean) => void;
+
+  // Optimization
+  optimizationResult: OptimizationResult | null;
+  isOptimizing: boolean;
+  runOptimization: () => Promise<void>;
+  applySchedule: () => void;
+
+  // Alerts
+  alerts: Alert[];
+  addAlert: (alert: Omit<Alert, 'id' | 'timestamp' | 'read'>) => void;
+  markAlertRead: (id: string) => void;
+  clearAlerts: () => void;
 }
 
 export interface FlatData {
@@ -88,7 +194,35 @@ const defaultColonyData: ColonyData = {
   ],
 };
 
-export const useVoltStore = create<VoltStore>((set) => ({
+const defaultAlerts: Alert[] = [
+  {
+    id: '1',
+    type: 'tariff',
+    title: 'Peak Time Starting!',
+    message: 'Peak tariff starts in 10 minutes. Consider postponing heavy appliance usage.',
+    timestamp: new Date(Date.now() - 5 * 60 * 1000),
+    read: false,
+    actionLabel: 'View Schedule',
+  },
+  {
+    id: '2',
+    type: 'savings',
+    title: '₹18 Saved Today',
+    message: 'You saved ₹18 today by shifting geyser to sasta hours!',
+    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
+    read: false,
+  },
+  {
+    id: '3',
+    type: 'anomaly',
+    title: 'AC Usage Alert',
+    message: 'AC running 40% longer than usual. Check if temperature settings are optimal.',
+    timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
+    read: false,
+  },
+];
+
+export const useVoltStore = create<VoltStore>((set, get) => ({
   tariffMode: 'mid',
   setTariffMode: (mode) => set({ tariffMode: mode }),
 
@@ -108,4 +242,179 @@ export const useVoltStore = create<VoltStore>((set) => ({
   toggleAppliance: (id) => set((state) => ({
     appliances: state.appliances.map(a => a.id === id ? { ...a, isOn: !a.isOn } : a)
   })),
+
+  // Auth
+  isAuthenticated: false,
+  user: null,
+  setUser: (user) => set({ user, isAuthenticated: !!user }),
+  login: async (phone: string, otp: string) => {
+    // Mock login - in production, call API
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    if (otp === '123456') {
+      set({
+        isAuthenticated: true,
+        user: {
+          id: '1',
+          name: 'Avinash',
+          phone,
+          discom: 'UPPCL',
+          accountType: 'postpaid',
+          location: 'Dwarka, Delhi',
+        },
+      });
+      return true;
+    }
+    return false;
+  },
+  logout: () => set({ isAuthenticated: false, user: null }),
+
+  // Onboarding
+  onboarding: {
+    currentStep: 1,
+    userInfo: null,
+    meterInfo: null,
+    appliancePreferences: {},
+  },
+  setOnboardingStep: (step) => set((state) => ({
+    onboarding: { ...state.onboarding, currentStep: step }
+  })),
+  setUserInfo: (info) => set((state) => ({
+    onboarding: { ...state.onboarding, userInfo: info }
+  })),
+  setMeterInfo: (info) => set((state) => ({
+    onboarding: { ...state.onboarding, meterInfo: info }
+  })),
+  setAppliancePreferences: (prefs) => set((state) => ({
+    onboarding: { ...state.onboarding, appliancePreferences: prefs }
+  })),
+  completeOnboarding: () => {
+    const { onboarding, user } = get();
+    if (onboarding.userInfo && user) {
+      set({
+        user: {
+          ...user,
+          name: onboarding.userInfo.name,
+          discom: onboarding.userInfo.discom,
+          accountType: onboarding.userInfo.accountType,
+          meterNumber: onboarding.meterInfo?.meterNumber,
+        },
+      });
+    }
+  },
+
+  // Chat
+  chatMessages: [],
+  isTyping: false,
+  sendMessage: (text) => {
+    const newMessage: ChatMessage = {
+      id: generateMessageId(),
+      text,
+      sender: 'user',
+      timestamp: new Date(),
+    };
+    set((state) => ({
+      chatMessages: [...state.chatMessages, newMessage],
+      isTyping: true,
+    }));
+
+    // Simulate bot response
+    setTimeout(() => {
+      get().addBotMessage(getBotResponse(text), 'text');
+      set({ isTyping: false });
+    }, 1500);
+  },
+  addBotMessage: (text, type = 'text') => {
+    const newMessage: ChatMessage = {
+      id: generateMessageId(),
+      text,
+      sender: 'bot',
+      timestamp: new Date(),
+      type,
+    };
+    set((state) => ({
+      chatMessages: [...state.chatMessages, newMessage],
+    }));
+  },
+  setIsTyping: (typing) => set({ isTyping: typing }),
+
+  // Optimization
+  optimizationResult: null,
+  isOptimizing: false,
+  runOptimization: async () => {
+    set({ isOptimizing: true });
+    
+    // Simulate ML pipeline
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    
+    const result: OptimizationResult = {
+      originalCost: 61.40,
+      optimizedCost: 47.20,
+      savings: 14.20,
+      savingsPercent: 23,
+      schedule: [
+        { applianceId: 'geyser', applianceName: 'Geyser', scheduledTime: '5:00 AM', status: 'scheduled', tariffZone: 'sasta' },
+        { applianceId: 'wm', applianceName: 'Washing Machine', scheduledTime: '10:00 PM', status: 'scheduled', tariffZone: 'sasta' },
+        { applianceId: 'ac', applianceName: 'Air Conditioner', scheduledTime: '1:00 PM', status: 'scheduled', tariffZone: 'mid' },
+      ],
+      solveTimeMs: 187,
+      pipeline: 'LSTM → XGBoost → MILP',
+    };
+    
+    set({ optimizationResult: result, isOptimizing: false });
+  },
+  applySchedule: () => {
+    const { optimizationResult, appliances } = get();
+    if (optimizationResult) {
+      const updatedAppliances = appliances.map(a => {
+        const schedule = optimizationResult.schedule.find(s => s.applianceId === a.id);
+        return schedule ? { ...a, schedule: schedule.scheduledTime } : a;
+      });
+      set({ appliances: updatedAppliances });
+    }
+  },
+
+  // Alerts
+  alerts: defaultAlerts,
+  addAlert: (alert) => {
+    const newAlert: Alert = {
+      ...alert,
+      id: Date.now().toString(),
+      timestamp: new Date(),
+      read: false,
+    };
+    set((state) => ({
+      alerts: [newAlert, ...state.alerts],
+    }));
+  },
+  markAlertRead: (id) => set((state) => ({
+    alerts: state.alerts.map(a => a.id === id ? { ...a, read: true } : a)
+  })),
+  clearAlerts: () => set({ alerts: [] }),
 }));
+
+// Unique ID generator for chat messages (prevents collision)
+let messageIdCounter = 0;
+const generateMessageId = () => `msg-${Date.now()}-${++messageIdCounter}`;
+
+// Helper function for bot responses
+function getBotResponse(userMessage: string): string {
+  const msg = userMessage.toLowerCase();
+  
+  if (msg.includes('bill') || msg.includes('aaj')) {
+    return '💡 Today\'s estimated bill: ₹18.40\n\nBreakdown:\n• AC: ₹8.20\n• Geyser: ₹4.10\n• Other: ₹6.10\n\nYou\'re 12% below average! 🎉';
+  }
+  
+  if (msg.includes('geyser') || msg.includes('chalu')) {
+    return '🔥 Geyser scheduled for 5:00 AM (Sasta tariff)\n\nWant to turn it on now? It will cost ₹2.80 extra at current mid tariff.';
+  }
+  
+  if (msg.includes('ac') || msg.includes('band')) {
+    return '❄️ AC is currently ON running at 1.5 kW.\n\nRunning during peak hours costs 65% more. Consider scheduling it for mid or sasta tariff times.';
+  }
+  
+  if (msg.includes('tips') || msg.includes('save')) {
+    return '💰 Top 3 Savings Tips:\n\n1. Run geyser during 5-6 AM (sasta hours)\n2. Use washing machine after 10 PM\n3. Set AC to 24°C instead of 22°C\n\nPotential monthly savings: ₹420';
+  }
+  
+  return '👋 I can help you with:\n• Check today\'s bill\n• Control appliances\n• Get savings tips\n• View peak hours\n\nWhat would you like to know?';
+}

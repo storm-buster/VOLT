@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { BarChart3, Cpu, Receipt, Leaf, ArrowRight, Zap, TrendingDown } from 'lucide-react';
+import { BarChart3, Cpu, Receipt, Leaf, ArrowRight, Zap, Sparkles } from 'lucide-react';
 import { EnergyFlowScene } from '@/components/three/EnergyFlowScene';
 
 export default function DashboardOverview() {
@@ -62,7 +62,7 @@ export default function DashboardOverview() {
   ];
 
   return (
-    <div className="ml-[260px] pt-16 min-h-screen">
+    <div className="ml-0 lg:ml-[260px] pt-16 min-h-screen bg-[#0a0f1c]">
       <div className="p-6 lg:p-10 max-w-[1200px]">
         
         <div className="mb-8">
@@ -70,7 +70,7 @@ export default function DashboardOverview() {
           <p className="text-gray-500">A concise snapshot of your home&apos;s energy intelligence.</p>
         </div>
 
-        {/* Quick highlight banner */}
+        {/* Quick highlight banner with Optimize button */}
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -85,7 +85,12 @@ export default function DashboardOverview() {
               <p className="text-white/80 text-sm mt-1">Smart scheduling has saved you ₹227 this month.</p>
             </div>
           </div>
-          <TrendingDown className="w-10 h-10 text-white/40" />
+          <Link href="/optimization">
+            <button className="px-6 py-3 bg-white/20 hover:bg-white/30 rounded-xl font-semibold transition-all flex items-center gap-2 hover:scale-105">
+              <Sparkles className="w-5 h-5" />
+              Optimize
+            </button>
+          </Link>
         </motion.div>
 
         {/* 3D Energy Flow Visualization */}

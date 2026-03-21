@@ -6,7 +6,8 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Zap, BarChart3, Cpu, Receipt, Leaf,
-  ChevronLeft, ChevronRight, LayoutDashboard
+  ChevronLeft, ChevronRight, LayoutDashboard,
+  Sparkles, Bell, TrendingUp, MessageSquare
 } from 'lucide-react';
 
 const navLinks = [
@@ -14,6 +15,10 @@ const navLinks = [
   { href: '/dashboard', label: 'Dashboard Overview', icon: LayoutDashboard },
   { href: '/energy-usage', label: 'Energy Usage & Schedules', icon: BarChart3 },
   { href: '/appliances', label: 'Appliances', icon: Cpu },
+  { href: '/optimization', label: 'Optimization', icon: Sparkles },
+  { href: '/insights', label: 'Insights', icon: TrendingUp },
+  { href: '/alerts', label: 'Alerts', icon: Bell },
+  { href: '/chat', label: 'AI Assistant', icon: MessageSquare },
   { href: '/billing', label: 'Billing & Saving', icon: Receipt },
   { href: '/carbon', label: 'Carbon Footprints', icon: Leaf },
 ];
@@ -22,8 +27,8 @@ export function Sidebar() {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
 
-  // Don't show sidebar on landing page
-  if (pathname === '/') return null;
+  // Don't show sidebar on landing, login, and onboarding pages
+  if (pathname === '/' || pathname === '/login' || pathname === '/onboarding') return null;
 
   return (
     <motion.aside
@@ -52,14 +57,17 @@ export function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto scrollbar-hide">
+      <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto scrollbar-hide" aria-label="Main navigation">
         {navLinks.map(({ href, label, icon: Icon }) => {
-          const isActive = pathname === href || (href !== '/' && pathname.startsWith(href));
+          // Exact match or starts with href followed by /
+          const isActive = pathname === href || 
+            (href !== '/' && pathname.startsWith(href + '/'));
           return (
             <Link
               key={href}
               href={href}
               title={collapsed ? label : undefined}
+              aria-current={isActive ? 'page' : undefined}
               className={`flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 group relative ${
                 isActive
                   ? 'bg-volt-blue text-white shadow-lg shadow-volt-blue/20'
